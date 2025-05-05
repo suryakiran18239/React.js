@@ -1,0 +1,30 @@
+.App{
+    text-align: center;
+    background-color: #282c34;
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.btn{
+    background-color: #61dafb;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+
+    
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
