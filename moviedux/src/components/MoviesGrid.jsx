@@ -26,8 +26,35 @@ function MoviesGrid() {
     setRating(e.target.value);
   };
 
+  const matchesGenre = (movie,genre) =>{
+    return genre === "All Genre" || movie.genre.toLowerCase() === genre.toLowerCase();
+  }
+
+  const matchesSearchTerm = (movie, searchTerm)=>{
+    return movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+  }
+
+  const matchesRating = (movie,rating) =>{
+    switch(rating){
+      case "All" :
+      return true;
+
+      case "Good":
+        return movie.rating >=8;
+
+      case "Ok":
+        return movie.rating >=5 && movie.rating <8;
+
+      case "Bad":
+        return movie.rating <5;
+
+      default:
+        return false;
+    } 
+  };
+
   const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    matchesGenre(movie, genre) && matchesRating(movie, rating) && matchesSearchTerm(movie, searchTerm)
   );
 
   return (
@@ -41,13 +68,9 @@ function MoviesGrid() {
           onChange={handleSearch}
         />
         <div className="filter-bar">
-          <div
-            className="filter-slot"
-            value={genre}
-            onChange={handleGenreChange}
-          >
+          <div className="filter-slot">
             <label>Genre</label>
-            <select>
+            <select value={genre} onChange={handleGenreChange}>
               <option>All Genre</option>
               <option>Action</option>
               <option>Drama</option>
@@ -56,13 +79,9 @@ function MoviesGrid() {
             </select>
           </div>
 
-          <div
-            className="filter-slot"
-            value={rating}
-            onChange={handleRatingChange}
-          >
+          <div className="filter-slot">
             <label>Rating</label>
-            <select>
+            <select value={rating} onChange={handleRatingChange}>
               <option>All</option>
               <option>Good</option>
               <option>Ok</option>
