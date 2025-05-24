@@ -5,8 +5,8 @@ import MovieCard from "./MovieCard";
 function MoviesGrid() {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [genre, setGenre] = useState("All Genres");
-  const [rating, setRating] = useState("All Ratings");
+  const [genre, setGenre] = useState("All Genre");
+  const [rating, setRating] = useState("All");
 
   useEffect(() => {
     fetch("movies.json")
@@ -26,35 +26,40 @@ function MoviesGrid() {
     setRating(e.target.value);
   };
 
-  const matchesGenre = (movie,genre) =>{
-    return genre === "All Genre" || movie.genre.toLowerCase() === genre.toLowerCase();
-  }
+  const matchesGenre = (movie, genre) => {
+    return (
+      genre === "All Genre" || movie.genre.toLowerCase() === genre.toLowerCase()
+    );
+  };
 
-  const matchesSearchTerm = (movie, searchTerm)=>{
-    return movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  }
+  const matchesSearchTerm = (movie, searchTerm) => {
+    return movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+  };
 
-  const matchesRating = (movie,rating) =>{
-    switch(rating){
-      case "All" :
-      return true;
+  const matchesRating = (movie, rating) => {
+    switch (rating) {
+      case "All":
+        return true;
 
       case "Good":
-        return movie.rating >=8;
+        return movie.rating >= 8;
 
       case "Ok":
-        return movie.rating >=5 && movie.rating <8;
+        return movie.rating >= 5 && movie.rating < 8;
 
       case "Bad":
-        return movie.rating <5;
+        return movie.rating < 5;
 
       default:
         return false;
-    } 
+    }
   };
 
-  const filteredMovies = movies.filter((movie) =>
-    matchesGenre(movie, genre) && matchesRating(movie, rating) && matchesSearchTerm(movie, searchTerm)
+  const filteredMovies = movies.filter(
+    (movie) =>
+      matchesGenre(movie, genre) &&
+      matchesRating(movie, rating) &&
+      matchesSearchTerm(movie, searchTerm)
   );
 
   return (
