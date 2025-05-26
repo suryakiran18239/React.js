@@ -10,7 +10,6 @@ function App() {
   return (
     <div className="app">
       <TaskForm />
-      <header className="app_header">Header section</header>
       <main className="app_main">
         <TaskColumn title="To do" icon={todoIcon} />
         <TaskColumn title="Doing" icon={doingIcon} />
