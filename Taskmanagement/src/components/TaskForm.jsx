@@ -6,7 +6,11 @@ function TaskForm() {
   const [taskData, setTaskData] = useState({
     task: "",
     status: "todo",
+    tags: [],
   });
+
+  const selectTag = () => {};
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTaskData((prev) => {
@@ -45,10 +49,10 @@ function TaskForm() {
 
         <div className="task_form_bottom_line">
           <div>
-            <Tag tagName="HTML" />
-            <Tag tagName="CSS" />
-            <Tag tagName="JavaScript" />
-            <Tag tagName="React.js" />
+            <Tag tagName="HTML" selectTag={selectTag} />
+            <Tag tagName="CSS" selectTag={selectTag} />
+            <Tag tagName="JavaScript" selectTag={selectTag} />
+            <Tag tagName="React.js" selectTag={selectTag} />
           </div>
           <div>
             <select
