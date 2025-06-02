@@ -4,9 +4,10 @@ import Nav from "../components/Nav";
 import { food_items } from "../food";
 import { useContext } from "react";
 import { dataContext } from "../context/UserContext";
+import { RxCross2 } from "react-icons/rx";
 
 function Home() {
-  let { cate, setCate, input } = useContext(dataContext);
+  let { cate, setCate, input, showCart, setShowCart } = useContext(dataContext);
 
   function filter(category) {
     if (category === "All") {
@@ -50,6 +51,20 @@ function Home() {
             />
           );
         })}
+      </div>
+      <div
+        className={`w-[40vw] h-[100%] bg-white fixed top-0 right-0 p-6 transition-all duration-600
+        ${showCart ? "translate-x-0" : "translate-x-full"}`}
+      >
+        <header className="flex justify-between items-center w-[100%]">
+          <span className="text-green-400 text-[18px] font-bold">
+            Order items
+          </span>
+          <RxCross2
+            className="text-green-400 text=[18px] font-bold w-[30px] h-[30px] cursor-pointer hover:text-gray-600"
+            onClick={() => setShowCart(false)}
+          />
+        </header>
       </div>
     </div>
   );
