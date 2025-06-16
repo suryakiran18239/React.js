@@ -1,14 +1,16 @@
+import { useContext, useEffect, useState } from "react";
 import Categories from "../Category";
 import Card from "../components/Card";
 import Nav from "../components/Nav";
 import { food_items } from "../food";
-import { useContext } from "react";
 import { dataContext } from "../context/UserContext";
 import { RxCross2 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 import Card2 from "../components/Card2";
 
 function Home() {
-  let { cate, setCate, input, showCart, setShowCart } = useContext(dataContext);
+  let { input, setInput, cate, setCate, showCart, setShowCart } =
+    useContext(dataContext);
 
   function filter(category) {
     if (category === "All") {
@@ -21,16 +23,23 @@ function Home() {
     }
   }
 
+  let items = useSelector((state) => state.cart);
+  let subtotal = items.reduce((total, item) => total + item.price, 0);
+  let deliveryFee = 40;
+  let taxes = (subtotal * 5) / 100;
+  let total = Math.floor(subtotal + deliveryFee + taxes);
+
   return (
-    <div className="w-full min-h-[100vh] bg-slate-200">
+    <div>
       <Nav />
-      {/* Display categories only if input is empty */}
+      {/* Categories */}
       {!input ? (
-        <div className="flex flex-wrap justify-center items-center gap-6 w-[100%]">
+        <div className="flex flex-wrap justify-center items-center gap-5 w-[100%]">
           {Categories.map((item) => {
             return (
               <div
-                className="w-[140px] h-[150px] bg-white flex flex-col items-start gap-5 p-5 text-[20px] font-semibold text-gray-600 rounded-lg shadow-md hover:bg-green-200 cursor-pointer transition-all duration-200"
+                className="w-[140px] h-[150px] bg-white flex flex-col items-start gap-5 p-5 justify-start text-[20px] font-semibold text-gray-600 rounded-lg shadow-xl hover:bg-green-200 cursor-pointer transition-all duration-200"
+                key={item.id}
                 onClick={() => filter(item.name)}
               >
                 {item.icon}
@@ -40,33 +49,78 @@ function Home() {
           })}
         </div>
       ) : null}
-      <div className="w-full flex flex-wrap gap-5 justify-center align-center pt-8 pb-8 px-5">
-        {cate.map((item) => {
-          return (
-            <Card
-              name={item.food_name}
-              image={item.food_image}
-              price={item.price}
-              type={item.food_type}
-              id={item.id}
-            />
-          );
-        })}
+      {/* cards */}
+      <div className="w-full flex flex-wrap gap-5 px-5 justify-center items-center pt-8 pb-8">
+        {cate.map((item) => (
+          <Card
+            name={item.food_name}
+            image={item.food_image}
+            price={item.price}
+            id={item.id}
+            type={item.food_type}
+            key={item.id}
+          />
+        ))}
       </div>
+      {/* Cart */}
       <div
-        className={`w-full md:w-[40vw] h-[100%] bg-white fixed top-0 right-0 p-6 transition-all duration-600
-        ${showCart ? "translate-x-0" : "translate-x-full"}`}
+        className={`w-full md:w-[40vw] h-full fixed top-0 right-0 bg-white shadow-xl flex flex-col items-center overflow-auto p-6 transition-all duration-500 ${
+          showCart ? "translate-x-0" : "translate-x-full"
+        }`}
       >
-        <header className="flex justify-between items-center w-[100%]">
-          <span className="text-green-400 text-[18px] font-bold">
+        <header className="w-full flex justify-between items-center ">
+          <span className="text-green-400 text-[18px] font-semibold">
             Order items
           </span>
           <RxCross2
-            className="text-green-400 text=[18px] font-bold w-[30px] h-[30px] cursor-pointer hover:text-gray-600"
+            className="w-[30px] h-[30px] text-green-400 text-[18px] font-semibold cursor-pointer hover:text-gray-600"
             onClick={() => setShowCart(false)}
           />
         </header>
-        <Card2 />
+        <div className="w-full mt-9 flex flex-col gap-8">
+          {items.map((item) => (
+            <Card2
+              name={item.name}
+              price={item.price}
+              image={item.image}
+              id={item.id}
+              qty={item.qty}
+            />
+          ))}
+        </div>
+        <div className="w-full border-t-2 border-b-2 border-gray-400 mt-7 flex flex-col gap-2 p-8">
+          <div className="w-full flex justify-between items-center">
+            <span className="text-lg text-gray-600 font-semibold">
+              Subtotal
+            </span>
+            <span className="text-green-400 font-semibold text-lg">
+              Rs {subtotal}/-
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span className="text-lg text-gray-600 font-semibold">
+              Delivery Fee
+            </span>
+            <span className="text-green-400 font-semibold text-lg">
+              Rs {deliveryFee}/-
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span className="text-lg text-gray-600 font-semibold">Taxes</span>
+            <span className="text-green-400 font-semibold text-lg">
+              Rs {taxes}/-
+            </span>
+          </div>
+        </div>
+        <div className="w-full flex justify-between items-center p-9">
+          <span className="text-2xl text-gray-600 font-semibold">Total</span>
+          <span className="text-green-400 font-semibold text-2xl">
+            Rs {total}/-
+          </span>
+        </div>
+        <button className="w-[80%] p-3 bg-green-500 rounded-xl cursor-pointer text-white hover:bg-green-400 transition-all">
+          Place Order
+        </button>
       </div>
     </div>
   );
